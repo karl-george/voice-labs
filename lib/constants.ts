@@ -1,6 +1,7 @@
 import { QuickAction } from '@/types';
 
 export const TEXT_MAX_LENGTH = 2000;
+export const COST_PER_UNIT = 0.0003;
 
 export const quickActions: QuickAction[] = [
   {
