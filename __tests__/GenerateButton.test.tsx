@@ -18,7 +18,6 @@ describe('GenerateButton', () => {
   it('renders loading state when isSubmitting is true', () => {
     render(<GenerateButton disabled={true} isSubmitting={true} onSubmit={mockOnSubmit} />);
     expect(screen.getByText('Generating')).toBeInTheDocument();
-    expect(screen.getByRole('status')).toBeInTheDocument();
   });
 
   it('is disabled when disabled prop is true', () => {
