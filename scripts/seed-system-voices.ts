@@ -66,6 +66,12 @@ const systemVoiceMetadata: Record<string, VoiceMetadata> = {
   },
 };
 
+/**
+ * Load a system voice WAV file from the local system-voices directory.
+ *
+ * @param name - Canonical system voice name (without the `.wav` extension)
+ * @returns An object with `buffer` containing the file bytes and `contentType` set to `'audio/wav'`
+ */
 async function readSystemVoiceAudio(name: string) {
   const filePath = path.join(SYSTEM_VOICES_DIR, `${name}.wav`);
   const buffer = Buffer.from(await fs.readFile(filePath));
@@ -89,7 +95,15 @@ async function readSystemVoiceAudio(name: string) {
 //   };
 //
 //   await r2.send(new PutObjectCommand(commandInput));
-// }
+/**
+ * Ensure a SYSTEM voice record exists for the given canonical voice name and attach its storage key and metadata when available.
+ *
+ * If a matching voice exists, its `r2ObjectKey` and any available metadata are updated. If none exists, a new SYSTEM voice record is created and its `r2ObjectKey` is set. If setting the storage key fails after creation, the newly created record is deleted and the original error is re-thrown.
+ *
+ * @param name - The canonical system voice name to seed (e.g., "Aaron", "Abigail")
+ *
+ * @throws Re-throws any error encountered while setting the storage key after creating a voice; the newly created record is deleted before the error is re-thrown.
+ */
 
 async function seedSystemVoice(name: string) {
   const { buffer, contentType } = await readSystemVoiceAudio(name);
@@ -174,6 +188,11 @@ async function seedSystemVoice(name: string) {
   }
 }
 
+/**
+ * Seeds canonical system voice records into the database and logs progress.
+ *
+ * Iterates over CANONICAL_SYSTEM_VOICE_NAMES, invoking seedSystemVoice for each name while emitting start, per-name, and completion log messages.
+ */
 async function main() {
   console.log(`Seeding ${CANONICAL_SYSTEM_VOICE_NAMES.length} system voices...`);
 
