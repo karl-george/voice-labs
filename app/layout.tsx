@@ -4,6 +4,7 @@ import './globals.css';
 import { Toaster } from '@/components/ui/sonner';
 import { ClerkProvider } from '@clerk/nextjs';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { TRPCReactProvider } from '@/trpc/client';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -23,6 +24,12 @@ export const metadata: Metadata = {
   description: 'AI-powered text-to-speech and voice cloning platform',
 };
 
+/**
+ * Provides the application's root layout and wraps `children` with authentication, TRPC, and UI providers.
+ *
+ * @param children - The page content to render inside the application's <body>.
+ * @returns The root React element containing the provider hierarchy, an `<html>` element with font CSS variables applied, a `<body>` that hosts `children`, and a `Toaster` component.
+ */
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -30,14 +37,16 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <TooltipProvider>
-        <html lang="en" className={`${inter.variable} ${geistMono.variable} h-full antialiased`}>
-          <body className="min-h-full flex flex-col">
-            {children}
-            <Toaster />
-          </body>
-        </html>
-      </TooltipProvider>
+      <TRPCReactProvider>
+        <TooltipProvider>
+          <html lang="en" className={`${inter.variable} ${geistMono.variable} h-full antialiased`}>
+            <body className="min-h-full flex flex-col">
+              {children}
+              <Toaster />
+            </body>
+          </html>
+        </TooltipProvider>
+      </TRPCReactProvider>
     </ClerkProvider>
   );
 }
