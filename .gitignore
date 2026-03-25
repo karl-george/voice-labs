@@ -50,3 +50,5 @@ next-env.d.ts
 /.clerk/
 
 /lib/generated/prisma
+
+/scripts/system-voices
