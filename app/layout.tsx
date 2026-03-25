@@ -24,6 +24,12 @@ export const metadata: Metadata = {
   description: 'AI-powered text-to-speech and voice cloning platform',
 };
 
+/**
+ * Provides the application's root layout and wraps `children` with authentication, TRPC, and UI providers.
+ *
+ * @param children - The page content to render inside the application's <body>.
+ * @returns The root React element containing the provider hierarchy, an `<html>` element with font CSS variables applied, a `<body>` that hosts `children`, and a `Toaster` component.
+ */
 export default function RootLayout({
   children,
 }: Readonly<{

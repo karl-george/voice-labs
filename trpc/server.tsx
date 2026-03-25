@@ -20,13 +20,23 @@ export const trpc = createTRPCOptionsProxy({
 //     links: [httpLink({ url: '...' })],
 //   }),
 //   queryClient: getQueryClient,
-// });
+/**
+ * Wraps children in a hydration boundary that embeds the server's React Query cache for client hydration.
+ *
+ * @param props.children - React nodes to render inside the hydration boundary
+ * @returns A React element containing `props.children` with the query client's dehydrated state applied
+ */
 
 export function HydrateClient(props: { children: React.ReactNode }) {
   const queryClient = getQueryClient();
   return <HydrationBoundary state={dehydrate(queryClient)}>{props.children}</HydrationBoundary>;
 }
 
+/**
+ * Initiates prefetch of the specified tRPC query into the request-scoped QueryClient.
+ *
+ * @param queryOptions - tRPC/TanStack query options; if `queryKey[1]?.type` is `"infinite"`, performs an infinite prefetch, otherwise performs a standard prefetch
+ */
 export function prefetch<T extends ReturnType<TRPCQueryOptions<any>>>(queryOptions: T) {
   const queryClient = getQueryClient();
   if (queryOptions.queryKey[1]?.type === 'infinite') {
